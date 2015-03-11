@@ -1,38 +1,38 @@
 class Push
-  @@destinataire
-  @@titre
-  @@note
+  @destinataire
+  @titre
+  @note
 
   # Constructeur de classe
   def initialize(destinataire = nil, titre = '', note = '')
 
-    @@destinataire = destinataire
-    @@titre = ''
-    @@note = ''
+    @destinataire = destinataire
+    @titre = titre
+    @note = note
   end
 
   #Getters & Setters
   def destinataire
-    @@destinataire
+    @destinataire
   end
 
   def destinataire=(destinataire)
-    @@destinataire = destinataire
+    @destinataire = destinataire
   end
 
   def titre
-    @@titre
+    @titre
   end
 
   def titre=(titre)
-    @@titre = titre
+    @titre = titre
   end
 
   def note
-    @@note
+    @note
   end
 
   def note=(note)
-    @@note=note
+    @note=note
   end
 end

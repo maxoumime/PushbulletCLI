@@ -1,3 +1,6 @@
+require 'rest_client'
+require 'json'
+
 class Network
 
   @@URL_ME = 'https://api.pushbullet.com/v2/users/me'
@@ -13,23 +16,34 @@ class Network
   def self.request(method, url, object = nil)
 
     if object.equal?(nil)
-      return RestClient::Request.new(
+      request = RestClient::Request.new(
           :method => method,
           :url => url,
-          :user => @@token,
+          :user => self.token,
           :password => '',
           :headers => { :accept => :json,
                         :content_type => :json }
       )
-    else return RestClient::Request.new(
+    else request = RestClient::Request.new(
         :method => method,
         :url => url,
-        :user => @@token,
+        :user => self.token,
         :password => '',
         :payload => object,
         :headers => { :accept => :json,
                       :content_type => :json }
     )
+    end
+
+    begin
+      response = request.execute
+    rescue => e
+      print e
+    end
+
+    if response != nil
+      return JSON.parse response
+    else return response
     end
   end
 
@@ -50,13 +64,18 @@ class Network
   end
 
   def self.token
-    @@token
+    if defined? @@token
+      @@token
+    else
+      puts 'Indiquez votre Token'
+      STDOUT.flush
+      Network.token= STDIN.gets
+      @@token
+   end
   end
 
   def self.token=(token)
     @@token = token
   end
-
-
 
 end

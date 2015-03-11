@@ -1,59 +1,22 @@
 require_relative 'PushbulletCLI/version'
-require 'rest_client'
-require 'json'
-require 'AccountUtils'
+require_relative 'AccountUtils'
+require_relative 'PushNote'
+require_relative 'PushLink'
+require_relative 'Network'
 
 module PushbulletCLI
 
   Network.token= 'p7SbeXsYv55JCiC3RUdV8hBUQTWQbe0E'
 
-  if Network.token.equal?(nil) || token.equal?('')
-    puts 'Indiquez votre Token'
-    STDOUT.flush
-    Network.token= gets.chomp
-  end
+  note = PushNote.new(
+      ARGV[0].to_str,
+      ARGV[1].to_str,
+      ARGV[2].to_str
+  )
 
-  begin
+  response_json = note.push
 
-
-
-
-  print response
-
-  #open(URL_CONTACTS, :http_basic_authentication=>[token, '']) {|f|
-  #  f.each_line {|line| response += line}
-  #  status = f.status[0]
-  #}
-
-  responseJSON = JSON.parse(response)
-
-  print responseJSON
-
-  #contacts = responseJSON['contacts']
-  #contacts.each {|c|
-  #  if c['active']
-  #    print c[:name]
-  #    print "\n"
-  #  end
-  #}
-
-  #devices = responseJSON[:devices]
-  #devices.each {|d|
-  #  if d[:nickname]
-  #    print d[:nickname]
-  #    print "\n"
-  #  end
-  #}
-
-  #print responseJSON
-
-  rescue => e
-    print e
-  #  status = e.io.status[0]
-  #  if status == HTTP_STATUS_FORBIDDEN
-  #    print 'Token faux'
-  #  end
-  end
+  print response_json
 
   print "\n"
 end

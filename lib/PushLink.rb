@@ -1,29 +1,37 @@
-require 'Network'
+require_relative 'Network'
+require_relative 'Push'
 
-class PushLink
+class PushLink < Push
 
-  @@lien
+  @url
 
   # Constructeur de classe
-  def initialize(destinataire = nil, lien = nil, titre = '', note = '')
+  def initialize(destinataire = nil, titre = '', note = '', url = nil)
 
-    @@destinataire = destinataire
-    @@lien = nil
-    @@titre = ''
-    @@note = ''
+    super destinataire, titre, note
+    @url = url
   end
 
   def push
-    #PUSH
+    push = JSON.generate(
+        {
+            :email => @destinataire,
+            :type => :link,
+            :title => @titre,
+            :body => @note,
+            :url => @url
+        }
+    )
+    Network.request(:post, Network.URL_PUSH, push)
   end
 
   #Getters & Setters
   def lien
-    @@lien
+    @lien
   end
 
   def lien=(lien)
-    @@lien = lien
+    @lien = lien
   end
 
 end

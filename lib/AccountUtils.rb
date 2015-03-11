@@ -1,16 +1,18 @@
-require 'Network'
+require_relative 'Network'
 
 class AccountUtils
 
-  def self.getContacts()
-    Network.request(:get, Network.URL_CONTACTS).execute
+  def self.get_contacts
+    response = Network.request(:get, Network.URL_CONTACTS).execute
+
+    print response
   end
 
-  def self.getAccount()
+  def self.get_account
 
   end
 
-  def self.getDevices()
+  def self.get_devices
 
   end
 end

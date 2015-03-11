@@ -2,14 +2,14 @@ require 'Network'
 
 class PushFile
 
-  @@file
+  @file
 
   # Constructeur de classe
   def initialize(destinataire = nil, titre = '', note = '')
 
-    @@destinataire = destinataire
-    @@titre = ''
-    @@note = ''
+    @destinataire = destinataire
+    @titre = titre
+    @note = note
   end
 
   def push
@@ -19,11 +19,11 @@ class PushFile
   #Getters & Setters
 
   def file
-    @@file
+    @file
   end
 
   def file=(file)
-    @@file=file
+    @file=file
   end
 
 end
