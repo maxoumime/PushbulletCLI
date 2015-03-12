@@ -6,8 +6,6 @@ require_relative 'Network'
 
 module PushbulletCLI
 
-  Network.token= 'p7SbeXsYv55JCiC3RUdV8hBUQTWQbe0E'
-
   note = PushNote.new(
       ARGV[0].to_str,
       ARGV[1].to_str,
