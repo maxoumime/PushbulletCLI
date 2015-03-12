@@ -6,15 +6,46 @@ require_relative 'Network'
 
 module PushbulletCLI
 
-  note = PushNote.new(
-      ARGV[0].to_str,
-      ARGV[1].to_str,
-      ARGV[2].to_str
+  destinataire = ''
+  titre = ''
+  note = ''
+
+  arguments = JSON.parse ARGV.inspect
+
+  #Suppresion des arguments parasites
+  ARGV.select! { |file| File.exists?(file) }
+
+  if ARGV.empty?
+    if arguments[1] != nil
+      note = arguments[1]
+    else
+      puts 'Indiquez votre note'
+      STDOUT.flush
+      note = STDIN.gets
+    end
+    if arguments[2] != nil
+      titre = arguments[2]
+    else
+      puts 'Indiquez votre titre'
+      STDOUT.flush
+      titre = STDIN.gets
+    end
+  else
+    ARGF.each do |line|
+      note += line
+    end
+  end
+
+  if arguments[0] != nil
+    destinataire = arguments[0]
+  end
+
+  push = PushNote.new(
+      destinataire,
+      titre,
+      note
   )
 
-  response_json = note.push
+  push.push
 
-  print response_json
-
-  print "\n"
 end

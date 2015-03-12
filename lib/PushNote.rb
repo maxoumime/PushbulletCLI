@@ -1,5 +1,6 @@
 require_relative 'Push'
 require_relative 'Network'
+require_relative 'Utils'
 
 class PushNote < Push
 
@@ -10,9 +11,11 @@ class PushNote < Push
   end
 
   def push
+
+    desConfig = Utils.find_receiver_type(@destinataire)
     push = JSON.generate(
         {
-            :email => @destinataire,
+            desConfig[0] => desConfig[1],
             :type => :note,
             :title => @titre,
             :body => @note

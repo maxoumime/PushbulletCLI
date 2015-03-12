@@ -7,8 +7,9 @@ class Network
   @@URL_DEVICES = 'https://api.pushbullet.com/v2/devices'
   @@URL_CONTACTS = 'https://api.pushbullet.com/v2/contacts'
   @@URL_PUSH = 'https://api.pushbullet.com/v2/pushes'
+  @@URL_CHANNELS = 'https://api.pushbullet.com/v2/subscriptions'
 
-  @@token
+  @@token = nil
 
   HTTP_STATUS_OK = '200'
   HTTP_STATUS_FORBIDDEN = '401'
@@ -38,12 +39,12 @@ class Network
     begin
       response = request.execute
     rescue => e
-      print e
+      #puts e.response
     end
 
     if response != nil
       return JSON.parse response
-    else return response
+    else return nil
     end
   end
 
@@ -63,8 +64,12 @@ class Network
     @@URL_PUSH
   end
 
+  def self.URL_CHANNELS
+    @@URL_CHANNELS
+  end
+
   def self.token
-    if defined? @@token
+    if @@token != nil
       @@token
     else
       puts 'Indiquez votre Token'
