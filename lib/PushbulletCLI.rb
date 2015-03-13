@@ -6,9 +6,13 @@ require_relative 'Network'
 
 module PushbulletCLI
 
+  trap('SIGINT') { exit! }
+
   destinataire = ''
   titre = ''
   note = ''
+
+  Network.token
 
   arguments = JSON.parse ARGV.inspect
 

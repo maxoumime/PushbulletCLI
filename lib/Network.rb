@@ -1,3 +1,4 @@
+require_relative 'Constants'
 require 'rest_client'
 require 'json'
 
@@ -11,8 +12,8 @@ class Network
 
   @@token = nil
 
-  HTTP_STATUS_OK = '200'
-  HTTP_STATUS_FORBIDDEN = '401'
+  HTTP_STATUS_OK = 200
+  HTTP_STATUS_FORBIDDEN = 401
 
   def self.request(method, url, object = nil)
 
@@ -38,14 +39,49 @@ class Network
 
     begin
       response = request.execute
-    rescue => e
-      #puts e.response
+    rescue RestClient::Exception => e
+      if e.http_code == HTTP_STATUS_FORBIDDEN
+        puts 'Token faux'
+        self.token= nil
+        puts self.token
+        return self.request method, url, object
+      else puts e.http_code
+      end
     end
 
     if response != nil
       return JSON.parse response
     else return nil
     end
+  end
+
+  def self.token
+
+    token_path = File.expand_path(Constants.TOKEN_FILE)
+
+    if ENV[Constants.TOKEN_ENV]
+      @@token = ENV[Constants.TOKEN_ENV]
+    elsif File.exists?(token_path)
+        @@token = File.read(token_path).strip
+    else @@token == nil
+      puts 'Indiquez votre Token'
+      STDOUT.flush
+      self.token= STDIN.gets.delete!("\n")
+    end
+
+    @@token
+  end
+
+  def self.token=(token)
+
+    if ENV[Constants.TOKEN_ENV]
+      ENV[Constants.TOKEN_ENV] = token
+    end
+
+    token_path = File.expand_path(Constants.TOKEN_FILE)
+    File.write(token_path, token)
+
+    @@token = token
   end
 
   def self.URL_ME
@@ -66,21 +102,6 @@ class Network
 
   def self.URL_CHANNELS
     @@URL_CHANNELS
-  end
-
-  def self.token
-    if @@token != nil
-      @@token
-    else
-      puts 'Indiquez votre Token'
-      STDOUT.flush
-      Network.token= STDIN.gets
-      @@token
-   end
-  end
-
-  def self.token=(token)
-    @@token = token
   end
 
 end
